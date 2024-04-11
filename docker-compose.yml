@@ -1,0 +1,30 @@
+version: "3"
+x-common-variables: &common-variables
+  MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+  MARIADB_REPLICATION_USER: repl
+  MARIADB_REPLICATION_PASSWORD: repl
+
+x-common-attributes: &common-attributes
+  image: mariadb:lts
+  environment: *common-variables
+
+services:
+  db1:
+    <<: *common-attributes
+    container_name: db1
+    hostname: db1
+    command: --server-id=1 --log-bin --log-slave-updates --log-basename=mariadb
+    environment:
+      - MARIADB_USER=dba
+      - MARIADB_PASSWORD=dba
+      - MARIADB_DATABASE=test
+
+  db2:
+    <<:
+      - *common-attributes
+    container_name: db2
+    hostname: db2
+    command: --server-id=2 --log-bin --log-slave-updates --log-basename=mariadb
+    environment:
+      - MARIADB_MASTER_HOST=db1
+
