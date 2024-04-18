@@ -1,30 +1,59 @@
-version: "3"
-x-common-variables: &common-variables
-  MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
-  MARIADB_REPLICATION_USER: repl
-  MARIADB_REPLICATION_PASSWORD: repl
-
-x-common-attributes: &common-attributes
-  image: mariadb:lts
-  environment: *common-variables
-
 services:
   db1:
-    <<: *common-attributes
+    image: mariadb:lts
     container_name: db1
     hostname: db1
+    restart: always
     command: --server-id=1 --log-bin --log-slave-updates --log-basename=mariadb
     environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=1
+      - MARIADB_REPLICATION_USER=repl
+      - MARIADB_REPLICATION_PASSWORD=repl
       - MARIADB_USER=dba
       - MARIADB_PASSWORD=dba
       - MARIADB_DATABASE=test
 
   db2:
-    <<:
-      - *common-attributes
+    image: mariadb:lts
     container_name: db2
     hostname: db2
+    restart: always
     command: --server-id=2 --log-bin --log-slave-updates --log-basename=mariadb
     environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=1
+      - MARIADB_REPLICATION_USER=repl
+      - MARIADB_REPLICATION_PASSWORD=repl
       - MARIADB_MASTER_HOST=db1
 
+  psql:
+    image: postgres
+    container_name: psql
+    hostname: psql
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=dba
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: dba
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: dba
+      ME_CONFIG_MONGODB_URL: mongodb://root:dba@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+
+  pmm:
+    image: percona/pmm-server
+    container_name: pmm
+    hostname: pmm
+    ports:
+      - 443:443
