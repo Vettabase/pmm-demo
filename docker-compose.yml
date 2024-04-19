@@ -40,24 +40,11 @@ services:
 
   mongo:
     image: mongo
-    container_name: monogo
+    container_name: mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: dba
-
-  mongoex:
-    image: mongo-express
-    container_name: monogoex
-    hostname: monogoex
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: dba
-      ME_CONFIG_MONGODB_URL: mongodb://root:dba@mongo:27017/
-      ME_CONFIG_BASICAUTH: false
 
   pmm:
     image: percona/pmm-server
