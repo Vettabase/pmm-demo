@@ -1,0 +1,17 @@
+[mariadbd]
+slow_query_log=1
+log_output=FILE,TABLE
+long_query_time=0
+log_queries_not_using_indexes=ON
+log_slow_admin_statements=ON
+log_slow_slave_statements=ON
+
+performance_schema=ON
+performance-schema-instrument='statement/%=ON'
+performance-schema-consumer-statements-digest=ON
+innodb_monitor_enable=all
+
+plugin_load_add = query_response_time
+query_response_time_stats=ON
+
+userstat=1
