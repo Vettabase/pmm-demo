@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 TESTS=/opt/homebrew/Cellar/sysbench/1.0.20_6/share/sysbench
+TESTS=/usr/share/sysbench/
 
 TABLES=16
 

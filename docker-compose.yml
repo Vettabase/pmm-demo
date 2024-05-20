@@ -1,10 +1,10 @@
 services:
   db1:
-    image: mariadb:11
+    image: mariadb:10.11
     container_name: db1
     hostname: db1
     restart: always
-    command: --server-id=1 --log-bin --log-slave-updates --log-basename=mariadb
+    command: --server-id=1 --log-bin --log-slave-updates --log-basename=mariadb --performance-schema=1 --userstat=1
     environment:
       - MARIADB_ROOT_PASSWORD=dba
       - MARIADB_REPLICATION_USER=repl
@@ -15,11 +15,11 @@ services:
       - ${PWD}/setup:/docker-entrypoint-initdb.d
 
   db2:
-    image: mariadb:11
+    image: mariadb:10.11
     container_name: db2
     hostname: db2
     restart: always
-    command: --server-id=2 --log-bin --log-slave-updates --log-basename=mariadb --read-only
+    command: --server-id=2 --log-bin --log-slave-updates --log-basename=mariadb --read-only --performance-schema=1 --userstat=1
     environment:
       - MARIADB_ROOT_PASSWORD=dba
       - MARIADB_REPLICATION_USER=repl
@@ -29,22 +29,6 @@ services:
       - 3308:3306
     volumes:
       - ${PWD}/setup:/docker-entrypoint-initdb.d
-
-  psql:
-    image: postgres
-    container_name: psql
-    hostname: psql
-    restart: always
-    environment:
-      - POSTGRES_PASSWORD=dba
-
-  mongo:
-    image: mongo
-    container_name: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: dba
 
   pmm:
     image: percona/pmm-server
