@@ -1,7 +1,7 @@
 services:
   db1:
     image: mariadb:11
-    container_name: pmm-demo-db1
+    container_name: pmm-db1
     hostname: db1
     restart: always
     command: --server-id=1 --log-bin --log-slave-updates --log-basename=mariadb --performance-schema=1 --userstat=1
@@ -16,7 +16,7 @@ services:
 
   db2:
     image: mariadb:11
-    container_name: pmm-demo-db2
+    container_name: pmm-db2
     hostname: db2
     restart: always
     command: --server-id=2 --log-bin --log-slave-updates --log-basename=mariadb --read-only --performance-schema=1 --userstat=1
