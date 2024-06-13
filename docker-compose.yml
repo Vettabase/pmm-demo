@@ -1,7 +1,7 @@
 services:
   db1:
-    image: mariadb:10.11
-    container_name: db1
+    image: mariadb:11
+    container_name: pmm-demo-db1
     hostname: db1
     restart: always
     command: --server-id=1 --log-bin --log-slave-updates --log-basename=mariadb --performance-schema=1 --userstat=1
@@ -15,8 +15,8 @@ services:
       - ${PWD}/setup:/docker-entrypoint-initdb.d
 
   db2:
-    image: mariadb:10.11
-    container_name: db2
+    image: mariadb:11
+    container_name: pmm-demo-db2
     hostname: db2
     restart: always
     command: --server-id=2 --log-bin --log-slave-updates --log-basename=mariadb --read-only --performance-schema=1 --userstat=1
